@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "tools.h"
 
+// 拆分文件 后不能编译, 不知道原因, 扔到main函数,并且在CMakeLists.txt添加 tools.c 后编译通过
+
 void func(){
     printf("func\n");
     printf("hello word\n");
@@ -17,7 +19,8 @@ int main(){
     int arr[] = {3, 5, 8, 1, 4};
     int size = sizeof(arr) / sizeof(arr[0]);
     int res = maxNum(arr, size);
-    printf("\nthe max num is: %d", res);
+    printf("最大的是: %d", res);
 
     return 0;
 }
+
