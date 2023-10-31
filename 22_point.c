@@ -40,6 +40,14 @@ int main(){
     printf("a and b is: %d %d\n", b, c);
     printf("*p1 and *p2 is: %d %d\n", *p1, *p2);
 
+    printf("*************************************************************\n");
+    printf("\n");
+    printf("\n");
+
+//    Êı×éÖ¸Õë
+    int arr[3][5];
+    int (*q)[5];
+
 
 
 
