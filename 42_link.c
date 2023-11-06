@@ -5,10 +5,10 @@
 #include <malloc.h>
 #include <string.h>
 
-typedef struct student{
+typedef struct stu{
     int Id;
     char name[32];
-    struct student *Next;
+    struct stu *Next;
 }STU;
 
 
@@ -27,7 +27,6 @@ void link_create(STU **p_head, STU *p_new){
     }
 }
 
-
 int main(){
 
     STU *header = NULL, *p_new = NULL;
@@ -39,6 +38,7 @@ int main(){
         p_new->Id = i;
         sprintf(name, "name_%d", i);
         strcpy(p_new->name, name);
+        p_new->Next = NULL; //没有这一步程序挂掉
 
         printf("%d: %p id(%d)\tname(%s)\tNext(%p)\n", i, p_new, p_new->Id, p_new->name, p_new->Next);
         link_create(&header, p_new);
