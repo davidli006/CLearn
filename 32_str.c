@@ -45,7 +45,7 @@ int main(){
 
     printf("******************************\n");
     char ss[] = "1234:4567:666;777";
-    char *rest = strstr(ss, "666");
+    char *rest = strstr(ss, "6676");
     printf("position of 6 is:%s\n", rest);
     printf("index of: %lld\n", rest - ss);
 

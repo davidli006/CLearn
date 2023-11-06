@@ -11,8 +11,20 @@ typedef struct stu{
     struct stu *Next;
 }STU;
 
+STU * makeStu(int i){
+    char name[32];
+    STU *p_new;
+    p_new = (STU*)malloc(sizeof(STU));
 
-void link_create(STU **p_head, STU *p_new){
+    p_new->Id = i;
+    sprintf(name, "name_%d", i);
+    strcpy(p_new->name, name);
+    p_new->Next = NULL; //没有这一步程序挂掉
+    return  p_new;
+}
+
+
+void create_link(STU **p_head, STU *p_new){
     STU *p_mov = *p_head;
     if(*p_head == NULL){
         *p_head = p_new;
@@ -21,36 +33,124 @@ void link_create(STU **p_head, STU *p_new){
         while (p_mov->Next != NULL){
             p_mov = p_mov->Next;
         }
-        printf("%s %s\n", p_mov->name, p_new->name);
+
         p_mov->Next = p_new;
         p_new->Next = NULL;
     }
+}
+
+void link_print(STU **header){
+    STU *pMov = *header;
+    while (pMov != NULL){
+        printf("%p\t%d-%s-%p\n", pMov, pMov->Id, pMov->name, pMov->Next);
+        pMov = pMov->Next;
+    }
+}
+
+void link_free(STU **header){
+    STU *pMov = *header;
+    while (pMov->Next != NULL){
+        pMov = *header;
+        *header = (*header)->Next;
+        printf("delete: %p\t%d-%s-%p\n", pMov, pMov->Id, pMov->name, pMov->Next);
+        free(pMov);
+        pMov = NULL; //防止野指针
+    }
+}
+
+STU * link_search(STU *header, char *name){
+    STU *pMov;
+    pMov = header;
+
+    while (pMov != NULL){
+        if (strstr(pMov->name, name) != NULL){
+            return pMov;
+        }
+        pMov = pMov->Next;
+    }
+    return NULL;
+}
+
+void link_add(STU **header, STU *p_new){
+    printf("add %d\t%s\n", p_new->Id, p_new->name);
+    STU *pPre = *header,*pMov = (*header)->Next;
+
+    while(pPre != NULL && pMov != NULL){
+        if (pPre->Id > p_new->Id){
+            p_new->Next = pPre;
+            *header = p_new;
+            return;
+        }
+        if (pMov->Id > p_new->Id){
+            pPre->Next = p_new;
+            p_new->Next = pMov;
+            return ;
+        }
+        pPre = pMov;
+        pMov = pMov->Next;
+    }
+
+    if (pPre == NULL){
+        *header = p_new;
+    }else{
+        pPre->Next = p_new;
+    }
+
+}
+
+void delete_search(STU **header, char *name){
+    STU *pMov,*pPre;
+    pMov = *header;
+    pPre = pMov;
+
+    while (pMov != NULL){
+        if (strcmp(pMov->name, name) == 0){
+            if (pPre->Id == pMov->Id){
+//                *header = pMov->Next;
+                *header = (*header)->Next;
+            }else{
+                pPre->Next = pMov->Next;
+            }
+            free(pMov);
+            pMov = NULL;
+            return ;
+        }
+        pPre = pMov;
+        pMov = pMov->Next;
+    }
+
 }
 
 int main(){
 
     STU *header = NULL, *p_new = NULL;
     int num = 9, i;
-    char name[32];
     for (i = 0;i < num; i++){
-        p_new = (STU*)malloc(sizeof(STU));
-
-        p_new->Id = i;
-        sprintf(name, "name_%d", i);
-        strcpy(p_new->name, name);
-        p_new->Next = NULL; //没有这一步程序挂掉
+        p_new = makeStu(i);
 
         printf("%d: %p id(%d)\tname(%s)\tNext(%p)\n", i, p_new, p_new->Id, p_new->name, p_new->Next);
-        link_create(&header, p_new);
-
-
+        create_link(&header, p_new);
     }
 
-    STU *pMov = header;
-    while (pMov->Next != NULL){
-        printf("%d-%s-%p\n", pMov->Id, pMov->name, pMov->Next);
-        pMov = pMov->Next;
-    }
+    printf("-------------------print----------------------\n");
+    link_print(&header);
+    printf("-------------------free----------------------\n");
+//    link_free(&header);
+    printf("-------------------find----------------------\n");
+    STU *res = link_search(header, "me_3");
+    printf("%d %s\n", res->Id, res->name);
+    link_print(&header);
+    printf("-------------------del----------------------\n");
+    delete_search(&header, "name_4");
+    delete_search(&header, "name_0");
+    link_print(&header);
+    printf("-------------------add----------------------\n");
+    p_new = makeStu(4);
+    link_add(&header, p_new);
+    link_print(&header);
+    printf("-------------------add----------------------\n");
+
+
 
     return 0;
 }
