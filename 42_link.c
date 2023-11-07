@@ -19,7 +19,7 @@ STU * makeStu(int i){
     p_new->Id = i;
     sprintf(name, "name_%d", i);
     strcpy(p_new->name, name);
-    p_new->Next = NULL; //û����һ������ҵ�
+    p_new->Next = NULL; //少这步没法正常运行
     return  p_new;
 }
 
@@ -54,7 +54,7 @@ void link_free(STU **header){
         *header = (*header)->Next;
         printf("delete: %p\t%d-%s-%p\n", pMov, pMov->Id, pMov->name, pMov->Next);
         free(pMov);
-        pMov = NULL; //��ֹҰָ��
+        pMov = NULL; //避免野指针
     }
 }
 
